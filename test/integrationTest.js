@@ -7,27 +7,27 @@ const Transaction = require('../model/transaction')
 
 chai.use(chaiHttp)
 
-describe('TDD', function(){
+describe('TDD', function () {
     let tokenAdmin;
     let tokenTukangBaso;
     let tukangBasoIdToDelete;
 
-    before(async function(){
+    before(async function () {
         await User.deleteMany({})
         await Transaction.deleteMany({})
     })
 
-    describe('User test', function(){
+    describe('User test', function () {
 
-        it('admin register', function(done){
+        it('admin register', function (done) {
             let body = {
-                username : 'adminTest01',
-                password : 'adminTest01',
+                username: 'adminTest01',
+                password: 'adminTest01',
             }
             chai.request(app)
                 .post('/user/registerAdmin')
                 .send(body)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     const user = res.body.user
                     expect(message).to.be.a('String')
@@ -44,15 +44,15 @@ describe('TDD', function(){
                 })
         })
 
-        it('admin register username already in use', function(done){
+        it('admin register username already in use', function (done) {
             let bodyRegisterFail = {
-                username : 'adminTest01',
-                password : 'adminTest01',
+                username: 'adminTest01',
+                password: 'adminTest01',
             }
             chai.request(app)
                 .post('/user/registerAdmin')
                 .send(bodyRegisterFail)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('username already in use')
@@ -60,15 +60,15 @@ describe('TDD', function(){
                 })
         })
 
-        it('admin login', function(done){
+        it('admin login', function (done) {
             let bodyLogin = {
-                username : 'adminTest01',
-                password : 'adminTest01',
+                username: 'adminTest01',
+                password: 'adminTest01',
             }
             chai.request(app)
                 .post('/user/login')
                 .send(bodyLogin)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const token = res.body.token
                     const isOwner = res.body.isOwner
                     expect(token).to.be.a('String')
@@ -79,19 +79,19 @@ describe('TDD', function(){
                 })
         })
 
-        it('add tukang baso success', function(done){
+        it('add tukang baso success', function (done) {
             let bodyAddTukangBaso = {
-                username : 'tukangBaso1',
-                password : 'tukangBaso1'
+                username: 'tukangBaso1',
+                password: 'tukangBaso1'
             }
             let headers = {
-                token : tokenAdmin
+                token: tokenAdmin
             }
             chai.request(app)
                 .post('/user/add')
                 .send(bodyAddTukangBaso)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     const user = res.body.user
                     expect(message).to.be.a('String')
@@ -111,15 +111,15 @@ describe('TDD', function(){
                 })
         })
 
-        it('login tukang baso success', function(done){
+        it('login tukang baso success', function (done) {
             let bodyTukangBasoLogin = {
-                username : 'tukangBaso1',
-                password : 'tukangBaso1'
+                username: 'tukangBaso1',
+                password: 'tukangBaso1'
             }
             chai.request(app)
                 .post('/user/login')
                 .send(bodyTukangBasoLogin)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const token = res.body.token
                     const isOwner = res.body.isOwner
                     expect(token).to.be.a('String')
@@ -130,15 +130,15 @@ describe('TDD', function(){
                 })
         })
 
-        it('login tukang baso fail', function(done){
+        it('login tukang baso fail', function (done) {
             let bodyAddTukangBasoFail3 = {
-                username : 'tukangBaso1',
-                password : 'random'
+                username: 'tukangBaso1',
+                password: 'random'
             }
             chai.request(app)
                 .post('/user/login')
                 .send(bodyAddTukangBasoFail3)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('wrong username/password')
@@ -146,15 +146,15 @@ describe('TDD', function(){
                 })
         })
 
-        it('login tukang baso fail', function(done){
+        it('login tukang baso fail', function (done) {
             let bodyAddTukangBasoFail3 = {
-                username : 'random',
-                password : 'random'
+                username: 'random',
+                password: 'random'
             }
             chai.request(app)
                 .post('/user/login')
                 .send(bodyAddTukangBasoFail3)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('wrong username/password')
@@ -162,59 +162,59 @@ describe('TDD', function(){
                 })
         })
 
-        it('add tukang baso fail authfail', function(done){
+        it('add tukang baso fail authfail', function (done) {
             let bodyAddTukangBasoFail = {
-                username : 'tukangBaso1',
-                password : 'tukangBaso1'
+                username: 'tukangBaso1',
+                password: 'tukangBaso1'
             }
             let headers = {
-                token : 'FAILTOKEN'
+                token: 'FAILTOKEN'
             }
             chai.request(app)
                 .post('/user/add')
                 .send(bodyAddTukangBasoFail)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authentication error')
                     done()
-            })
+                })
         })
 
-        it('add tukang baso fail authfail2', function(done){
+        it('add tukang baso fail authfail2', function (done) {
             let bodyAddTukangBasoFail2 = {
-                username : 'tukangBaso1',
-                password : 'tukangBaso1'
+                username: 'tukangBaso1',
+                password: 'tukangBaso1'
             }
             let headers = {
-                token : tokenTukangBaso
+                token: tokenTukangBaso
             }
             chai.request(app)
                 .post('/user/add')
                 .send(bodyAddTukangBasoFail2)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authorization error')
                     done()
-            })
+                })
         })
 
-        it('add tukang baso duplication user name', function(done){
+        it('add tukang baso duplication user name', function (done) {
             let bodyAddTukangBaso = {
-                username : 'tukangBaso1',
-                password : 'tukangBaso1'
+                username: 'tukangBaso1',
+                password: 'tukangBaso1'
             }
             let headers = {
-                token : tokenAdmin
+                token: tokenAdmin
             }
             chai.request(app)
                 .post('/user/add')
                 .send(bodyAddTukangBaso)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('username already in use')
@@ -222,19 +222,19 @@ describe('TDD', function(){
                 })
         })
 
-        it('update location', function(done){
-            let updateLocation = { 
-                latitude : -1.390238,
-                longitude : -1.09238023
+        it('update location', function (done) {
+            let updateLocation = {
+                latitude: -1.390238,
+                longitude: -1.09238023
             }
-            let headers =  {
-                token : tokenTukangBaso
+            let headers = {
+                token: tokenTukangBaso
             }
             chai.request(app)
                 .patch('/user')
                 .set(headers)
                 .send(updateLocation)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const updatedData = res.body.updatedData
                     expect(updatedData).to.be.an('Object')
                     expect(updatedData).to.have.property('username')
@@ -249,19 +249,19 @@ describe('TDD', function(){
                 })
         })
 
-        it('update location authfail', function(done){
-            let updateLocation = { 
-                latitude : 1,
-                longitude : 1
+        it('update location authfail', function (done) {
+            let updateLocation = {
+                latitude: 1,
+                longitude: 1
             }
-            let headers =  {
-                token : 'randomtoken'
+            let headers = {
+                token: 'randomtoken'
             }
             chai.request(app)
                 .patch('/user')
                 .set(headers)
                 .send(updateLocation)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authentication error')
@@ -269,14 +269,14 @@ describe('TDD', function(){
                 })
         })
 
-        it('delete tukang baso authfail', function(done){
+        it('delete tukang baso authfail', function (done) {
             let headers = {
-                token : 'randomtoken'
+                token: 'randomtoken'
             }
             chai.request(app)
                 .delete(`/user/RANDOMID`)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authentication error')
@@ -284,14 +284,14 @@ describe('TDD', function(){
                 })
         })
 
-        it('delete tukang baso authfail2', function(done){
+        it('delete tukang baso authfail2', function (done) {
             let headers = {
-                token : tokenTukangBaso
+                token: tokenTukangBaso
             }
             chai.request(app)
                 .delete(`/user/RANDOMID`)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authorization error')
@@ -299,14 +299,14 @@ describe('TDD', function(){
                 })
         })
 
-        it('delete tukang baso randomid', function(done){
+        it('delete tukang baso randomid', function (done) {
             let headers = {
-                token : tokenAdmin
+                token: tokenAdmin
             }
             chai.request(app)
                 .delete(`/user/RANDOMID`)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('data not found')
@@ -314,14 +314,14 @@ describe('TDD', function(){
                 })
         })
 
-        it('delete tukang baso success', function(done){
+        it('delete tukang baso success', function (done) {
             let headers = {
-                token : tokenAdmin
+                token: tokenAdmin
             }
             chai.request(app)
                 .delete(`/user/${tukangBasoIdToDelete}`)
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const deletedUser = res.body.deletedUser
                     expect(deletedUser).to.be.an('Object')
                     expect(deletedUser).to.have.property('_id')
@@ -332,17 +332,17 @@ describe('TDD', function(){
                 })
         })
 
-        it('fetch data user', function(done){
+        it('fetch data user', function (done) {
             let headers = {
-                token : tokenAdmin
+                token: tokenAdmin
             }
             chai.request(app)
                 .get('/user/')
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const penjualanBakso = res.body
                     expect(penjualanBakso).to.be.an('Array')
-                    penjualanBakso.forEach(penjual =>{
+                    penjualanBakso.forEach(penjual => {
                         expect(penjual).to.have.property('username')
                         expect(penjual).to.have.property('password')
                         expect(penjual).to.have.property('history')
@@ -356,20 +356,20 @@ describe('TDD', function(){
         })
     })
 
-    describe('Transaction test', function(){
-        it('create transaction test', function(done){
+    describe('Transaction test', function () {
+        it('create transaction test', function (done) {
             let bodyTransaction = {
-                latitude : 1,
-                longitude : 1
-            }  
+                latitude: 1,
+                longitude: 1
+            }
             let headers = {
-                token : tokenTukangBaso
+                token: tokenTukangBaso
             }
             chai.request(app)
                 .post('/transaction/')
                 .set(headers)
                 .send(bodyTransaction)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     const data = res.body.data
                     expect(message).to.be.an('String')
@@ -385,19 +385,19 @@ describe('TDD', function(){
                 })
         })
 
-        it('create transaction fail', function(done){
+        it('create transaction fail', function (done) {
             let bodyTransaction = {
-                latitude : 1,
-                longitude : 1
-            }  
+                latitude: 1,
+                longitude: 1
+            }
             let headers = {
-                token : 'randomtoken'
+                token: 'randomtoken'
             }
             chai.request(app)
                 .post('/transaction/')
                 .set(headers)
                 .send(bodyTransaction)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authentication error')
@@ -405,14 +405,14 @@ describe('TDD', function(){
                 })
         })
 
-        it('fetch data fail auth', function(done){
+        it('fetch data fail auth', function (done) {
             let headers = {
-                token : 'randomtoken'
+                token: 'randomtoken'
             }
             chai.request(app)
                 .get('/transaction/')
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authentication error')
@@ -420,14 +420,14 @@ describe('TDD', function(){
                 })
         })
 
-        it('fetch data fail auth 2', function(done){
+        it('fetch data fail auth 2', function (done) {
             let headers = {
-                token : tokenTukangBaso
+                token: tokenTukangBaso
             }
             chai.request(app)
                 .get('/transaction/')
                 .set(headers)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authorization error')
@@ -435,9 +435,30 @@ describe('TDD', function(){
                 })
         })
 
-        
-        
-        
+        it('fetch transaction', function (done) {
+            let headers = {
+                token: tokenAdmin
+            }
+            chai.request(app)
+                .get('/transaction')
+                .set(headers)
+                .end(function (err, res) {
+                    const penjualanBakso = res.body.penjualanBakso
+                    expect(penjualanBakso).to.be.an('Array')
+                    penjualanBakso.forEach(data => {
+                        expect(data).to.be.an('Object')
+                        expect(data).to.have.property('bowl')
+                        expect(data).to.have.property('tukangBaksoId')
+                        expect(data).to.have.property('latitude')
+                        expect(data).to.have.property('longitude')
+                        expect(data).to.have.property('createdAt')
+                        expect(data).to.have.property('updatedAt')
+                    })
+                    done()
+                })
+        })
+
+
     })
 })
 
