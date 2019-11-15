@@ -10,15 +10,27 @@ const cors = require('cors')
 const errorHandler = require('./middleware/errorHandler')
 const mongoose = require('mongoose')
 
-mongoose.connect(`mongodb://localhost/initBosBakso_${process.env.NODE_ENV}`, 
-    {   useNewUrlParser: true , 
-        useUnifiedTopology: true,
-        useCreateIndex : true,
-        useFindAndModify : false
-    }, 
-    () => {
-        console.log('connected to mongodb')
-})
+if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
+    mongoose.connect(`mongodb://localhost/initBosBakso_${process.env.NODE_ENV}`, 
+        {   useNewUrlParser: true , 
+            useUnifiedTopology: true,
+            useCreateIndex : true,
+            useFindAndModify : false
+        }, 
+        () => {
+            console.log('connected to mongodb LOCAL')
+    })
+} else {
+    mongoose.connect(process.env.MONGOATLAS, 
+        {   useNewUrlParser: true , 
+            useUnifiedTopology: true,
+            useCreateIndex : true,
+            useFindAndModify : false
+        }, 
+        () => {
+            console.log('connected to mongodb ATLAS')
+    })
+}
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
