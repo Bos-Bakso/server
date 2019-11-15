@@ -31,6 +31,7 @@ if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
             console.log('connected to mongodb ATLAS')
     })
 }
+
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
