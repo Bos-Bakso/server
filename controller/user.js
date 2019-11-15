@@ -75,7 +75,7 @@ class Controller {
                         _id, username, isOwner, latitude, longitude, history, image
                     }
                     const token = generateToken(payload)
-                    res.status(200).json({token, isOwner})
+                    res.status(200).json({token, isOwner, username, latitude, longitude, history, image})
                 }else{
                     throw next({ name : 'LoginError'})
                 }
