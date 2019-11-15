@@ -29,7 +29,6 @@ const User = new Schema({
     },
     image : {
         type : String,
-        default : 'https://porteous.com.au/wp-content/uploads/2016/09/dummy-profile-pic-male-300x300.jpg'
     }
 })
 

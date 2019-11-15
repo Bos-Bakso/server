@@ -3,19 +3,49 @@ const { compare } = require('../helper/bcrypt')
 const { generateToken } = require('../helper/jwt')
 
 class Controller {
-    static addTukangBaso(req,res,next){
+    static registerAdmin(req,res,next){
         const username = req.body.username
         const password = req.body.password
+        const isOwner = true
+        let image;
+        if(req.file){
+            image = req.file.cloudStoragePublicUrl
+        } else {
+            image = 'https://porteous.com.au/wp-content/uploads/2016/09/dummy-profile-pic-male-300x300.jpg'
+        }
         User.findOne({ username })
         .then( existingUser  => {
             if(existingUser){
                 throw next({ name : 'duplicationError'})
             }else {
-                return User.create({username, password })
+                return User.create({ username, password, image, isOwner })
             }
         })
         .then( user => {
-            res.status(201).json({ message : `${user.username} created` })
+            res.status(201).json({ message : `${user.username} created`, user })
+        })
+        .catch(next)
+    }
+    
+    static addTukangBaso(req,res,next){
+        const username = req.body.username
+        const password = req.body.password
+        let image;
+        if(req.file){
+            image = req.file.cloudStoragePublicUrl
+        }else{
+            image = 'https://porteous.com.au/wp-content/uploads/2016/09/dummy-profile-pic-male-300x300.jpg'
+        }
+        User.findOne({ username })
+        .then( existingUser  => {
+            if(existingUser){
+                throw next({ name : 'duplicationError'})
+            }else {
+                return User.create({username, password, image })
+            }
+        })
+        .then( user => {
+            res.status(201).json({ message : `${user.username} created`, user })
         })
         .catch(next)
     }
