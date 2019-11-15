@@ -72,7 +72,7 @@ class Controller {
                 if(compare(password, user.password)){
                     const { _id, username, isOwner, latitude, longitude, history } = user
                     const payload = { 
-                        _id, username, isOwner, latitude, longitude, history
+                        _id, username, isOwner, latitude, longitude, history, image
                     }
                     const token = generateToken(payload)
                     res.status(200).json({token, isOwner})
