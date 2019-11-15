@@ -95,7 +95,7 @@ class Controller {
         })
         .catch(next)
     }
-
+    
     static find(req,res,next){
         User.find({isOwner : false})
         .then( user => {

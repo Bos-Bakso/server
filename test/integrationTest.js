@@ -405,6 +405,34 @@ describe('TDD', function () {
                 })
         })
 
+        it('get transaction qty', function (done) {
+            let headers = {
+                token: tokenTukangBaso
+            }
+            chai.request(app)
+                .get('/transaction/mangkokQty')
+                .set(headers)
+                .end(function (err, res) {
+                    const data = res.body.data
+                    const qty = res.body.qty
+                    const message = res.body.message
+                    expect(data).to.be.an('Array')
+                    data.forEach(transaction => {
+                        expect(transaction).to.be.an('Object')
+                        expect(transaction).to.have.property('bowl')
+                        expect(transaction).to.have.property('tukangBaksoId')
+                        expect(transaction).to.have.property('latitude')
+                        expect(transaction).to.have.property('longitude')
+                        expect(transaction).to.have.property('createdAt')
+                        expect(transaction).to.have.property('updatedAt')
+                    })
+                    expect(qty).to.be.a('Number')
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('fetch success')
+                    done()
+                })
+        })
+
         it('create transaction fail', function (done) {
             let bodyTransaction = {
                 latitude: 1,
@@ -424,6 +452,8 @@ describe('TDD', function () {
                     done()
                 })
         })
+
+
 
         it('fetch data fail auth', function (done) {
             let headers = {
