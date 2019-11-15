@@ -56,8 +56,6 @@ class Controller {
         .then( deletedUser => {
             if(deletedUser){
                 res.status(200).json({deletedUser})
-            }else{
-                next({ name : 'CastError'})
             }
         })
         .catch(next)

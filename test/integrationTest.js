@@ -3,6 +3,7 @@ const chaiHttp = require('chai-http')
 const app = require('../app')
 const expect = require('chai').expect
 const User = require('../model/user')
+const Transaction = require('../model/transaction')
 
 chai.use(chaiHttp)
 
@@ -11,8 +12,9 @@ describe('TDD', function(){
     let tokenTukangBaso;
     let tukangBasoIdToDelete;
 
-    before(function(){
-        return User.deleteMany({})
+    before(async function(){
+        await User.deleteMany({})
+        await Transaction.deleteMany({})
     })
 
     describe('User test', function(){
@@ -130,6 +132,22 @@ describe('TDD', function(){
 
         it('login tukang baso fail', function(done){
             let bodyAddTukangBasoFail3 = {
+                username : 'tukangBaso1',
+                password : 'random'
+            }
+            chai.request(app)
+                .post('/user/login')
+                .send(bodyAddTukangBasoFail3)
+                .end(function(err,res){
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('wrong username/password')
+                    done()
+                })
+        })
+
+        it('login tukang baso fail', function(done){
+            let bodyAddTukangBasoFail3 = {
                 username : 'random',
                 password : 'random'
             }
@@ -182,6 +200,26 @@ describe('TDD', function(){
                     expect(message).to.be.equals('authorization error')
                     done()
             })
+        })
+
+        it('add tukang baso duplication user name', function(done){
+            let bodyAddTukangBaso = {
+                username : 'tukangBaso1',
+                password : 'tukangBaso1'
+            }
+            let headers = {
+                token : tokenAdmin
+            }
+            chai.request(app)
+                .post('/user/add')
+                .send(bodyAddTukangBaso)
+                .set(headers)
+                .end(function(err,res){
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('username already in use')
+                    done()
+                })
         })
 
         it('update location', function(done){
@@ -293,6 +331,102 @@ describe('TDD', function(){
                     done()
                 })
         })
+    })
+
+    describe('Transaction test', function(){
+        it('create transaction test', function(done){
+            let bodyTransaction = {
+                latitude : 1,
+                longitude : 1
+            }  
+            let headers = {
+                token : tokenTukangBaso
+            }
+            chai.request(app)
+                .post('/transaction/')
+                .set(headers)
+                .send(bodyTransaction)
+                .end(function(err,res){
+                    const message = res.body.message
+                    const data = res.body.data
+                    expect(message).to.be.an('String')
+                    expect(data).to.be.an('Object')
+                    expect(data).to.have.property('bowl')
+                    expect(data).to.have.property('tukangBaksoId')
+                    expect(data).to.have.property('latitude')
+                    expect(data).to.have.property('longitude')
+                    expect(data).to.have.property('createdAt')
+                    expect(data).to.have.property('updatedAt')
+                    expect(message).to.be.equals('data added to database')
+                    done()
+                })
+        })
+
+        it('create transaction fail', function(done){
+            let bodyTransaction = {
+                latitude : 1,
+                longitude : 1
+            }  
+            let headers = {
+                token : 'randomtoken'
+            }
+            chai.request(app)
+                .post('/transaction/')
+                .set(headers)
+                .send(bodyTransaction)
+                .end(function(err,res){
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('authentication error')
+                    done()
+                })
+        })
+
+        it('fetch data fail auth', function(done){
+            let headers = {
+                token : 'randomtoken'
+            }
+            chai.request(app)
+                .get('/transaction/')
+                .set(headers)
+                .end(function(err,res){
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('authentication error')
+                    done()
+                })
+        })
+
+        it('fetch data fail auth 2', function(done){
+            let headers = {
+                token : tokenTukangBaso
+            }
+            chai.request(app)
+                .get('/transaction/')
+                .set(headers)
+                .end(function(err,res){
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('authorization error')
+                    done()
+                })
+        })
+
+        it('fetch data', function(done){
+            let headers = {
+                token : tokenAdmin
+            }
+            chai.request(app)
+                .get('/transaction/')
+                .set(headers)
+                .end(function(err,res){
+                    const penjualanBakso = res.body.penjualanBakso
+                    expect(penjualanBakso).to.be.an('Array')
+                    done()
+                })
+        })
+        
+        
     })
 })
 

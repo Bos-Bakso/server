@@ -10,10 +10,6 @@ const Service = new Schema({
         type : String,
         required : [true, 'problem required']
     },
-    price : {
-        type : Number,
-        required : [true , 'price requied']
-    },
     solve : {
         type : Boolean,
         default : false
@@ -26,7 +22,7 @@ const Service = new Schema({
         type : Number,
         required : [true, 'longitude required']
     }
-})
+},{timestamps : true})
 
 const Model = mongoose.model('service', Service)
 module.exports = Model
