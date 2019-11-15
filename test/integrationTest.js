@@ -224,8 +224,8 @@ describe('TDD', function(){
 
         it('update location', function(done){
             let updateLocation = { 
-                latitude : 1,
-                longitude : 1
+                latitude : -1.390238,
+                longitude : -1.09238023
             }
             let headers =  {
                 token : tokenTukangBaso
@@ -331,6 +331,29 @@ describe('TDD', function(){
                     done()
                 })
         })
+
+        it('fetch data user', function(done){
+            let headers = {
+                token : tokenAdmin
+            }
+            chai.request(app)
+                .get('/user/')
+                .set(headers)
+                .end(function(err,res){
+                    const penjualanBakso = res.body
+                    expect(penjualanBakso).to.be.an('Array')
+                    penjualanBakso.forEach(penjual =>{
+                        expect(penjual).to.have.property('username')
+                        expect(penjual).to.have.property('password')
+                        expect(penjual).to.have.property('history')
+                        expect(penjual).to.have.property('isOwner')
+                        expect(penjual).to.have.property('latitude')
+                        expect(penjual).to.have.property('longitude')
+                        expect(penjual).to.have.property('image')
+                    })
+                    done()
+                })
+        })
     })
 
     describe('Transaction test', function(){
@@ -412,19 +435,7 @@ describe('TDD', function(){
                 })
         })
 
-        it('fetch data', function(done){
-            let headers = {
-                token : tokenAdmin
-            }
-            chai.request(app)
-                .get('/transaction/')
-                .set(headers)
-                .end(function(err,res){
-                    const penjualanBakso = res.body.penjualanBakso
-                    expect(penjualanBakso).to.be.an('Array')
-                    done()
-                })
-        })
+        
         
         
     })
