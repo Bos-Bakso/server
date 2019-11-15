@@ -56,8 +56,6 @@ class Controller {
         .then( deletedUser => {
             if(deletedUser){
                 res.status(200).json({deletedUser})
-            }else{
-                next({ name : 'CastError'})
             }
         })
         .catch(next)
@@ -99,12 +97,13 @@ class Controller {
     }
 
     static find(req,res,next){
-        User.find()
+        User.find({isOwner : false})
         .then( user => {
             res.status(200).json(user)
         })
         .catch(next)
-    }    
+    }
+
 }
 
 module.exports = Controller
