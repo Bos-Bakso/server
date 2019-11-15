@@ -13,7 +13,7 @@ module.exports = (err, req, res, next) => {
             res.status(422).json({ message })
             break
         case "LoginError":
-            var message = 'wrong email/password'
+            var message = 'wrong username/password'
             res.status(422).json({ message })
             break
         case "CastError":

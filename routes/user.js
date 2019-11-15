@@ -5,7 +5,7 @@ const { multer , sendUploadToGCS } = require('../helper/multer')
 
 router.get('/', Controller.find)
 router.post('/login', Controller.login)
-router.patch('/', authentication, authorization, Controller.updateLocation)
+router.patch('/', authentication, Controller.updateLocation)
 router.post('/registerAdmin', multer.single('image'), sendUploadToGCS ,Controller.registerAdmin )
 router.post('/add' , authentication, authorization, multer.single('image'), sendUploadToGCS ,Controller.addTukangBaso)
 router.delete('/:id', authentication, authorization ,Controller.pecatTukangBaso )

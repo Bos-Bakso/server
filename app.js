@@ -11,7 +11,11 @@ const errorHandler = require('./middleware/errorHandler')
 const mongoose = require('mongoose')
 
 mongoose.connect(`mongodb://localhost/initBosBakso_${process.env.NODE_ENV}`, 
-    { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex : true }, 
+    {   useNewUrlParser: true , 
+        useUnifiedTopology: true,
+        useCreateIndex : true,
+        useFindAndModify : false
+    }, 
     () => {
         console.log('connected to mongodb')
 })
