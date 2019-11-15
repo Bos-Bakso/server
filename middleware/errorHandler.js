@@ -8,10 +8,6 @@ module.exports = (err, req, res, next) => {
             }
             res.status(422).json({ message })
             break;
-        case "MongoError":
-            var message = 'Duplication data in database'
-            res.status(422).json({ message })
-            break
         case "LoginError":
             var message = 'wrong username/password'
             res.status(422).json({ message })

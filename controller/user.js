@@ -97,12 +97,13 @@ class Controller {
     }
 
     static find(req,res,next){
-        User.find()
+        User.find({isOwner : false})
         .then( user => {
             res.status(200).json(user)
         })
         .catch(next)
-    }    
+    }
+
 }
 
 module.exports = Controller

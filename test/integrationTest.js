@@ -222,6 +222,26 @@ describe('TDD', function () {
                 })
         })
 
+        it('add tukang baso validation error', function (done) {
+            let bodyAddTukangBaso = {
+                username: '',
+                password: 'tukangbaso1'
+            }
+            let headers = {
+                token: tokenAdmin
+            }
+            chai.request(app)
+                .post('/user/add')
+                .send(bodyAddTukangBaso)
+                .set(headers)
+                .end(function (err, res) {
+                    const message = res.body.message
+                    expect(message).to.be.an('Array')
+                    expect(message).to.include.members(['username is required'])
+                    done()
+                })
+        })
+
         it('update location', function (done) {
             let updateLocation = {
                 latitude: -1.390238,
