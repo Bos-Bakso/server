@@ -70,7 +70,7 @@ class Controller {
                 throw next({ name : 'LoginError'})
             }else {
                 if(compare(password, user.password)){
-                    const { _id, username, isOwner, latitude, longitude, history } = user
+                    const { _id, username, isOwner, latitude, longitude, history, image } = user
                     const payload = { 
                         _id, username, isOwner, latitude, longitude, history, image
                     }
