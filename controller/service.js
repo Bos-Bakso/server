@@ -1,30 +1,43 @@
 const Service = require('../model/service')
+const server = require('../app')
+const io = require('socket.io')(server)
 
 class Controller {
-    static addService(req,res,next){
+    static addService(req, res, next) {
         const problem = req.body.problem
         const latitude = req.body.latitude
         const longitude = req.body.longitude
         console.log('add service triggered', problem, latitude, longitude)
-        Service.create({ 
+        Service.create({
             problem,
             latitude,
             longitude,
-            tukangBasoId : req.loggedUser._id
-         })
-        .then(serviceCreated => {
-            res.status(201).json({serviceCreated, message: 'Service added to database'})
+            tukangBasoId: req.loggedUser._id
         })
-        .catch(next)
+            .then(serviceCreated => {
+                res.status(201).json({ serviceCreated, message: 'Service added to database' })
+            })
+            .catch(next)
     }
 
-    static updateService(req,res,next){
+    static updateService(req, res, next) {
         console.log('update service triggered', req.params.id)
-       Service.findOneAndUpdate({ _id : req.params.id }, { solve : true }) 
-       .then( data => {
-           res.status(200).json({data})
-       })
-       .catch(next)
+        Service.findOneAndUpdate({ _id: req.params.id }, { solve: true })
+            .then(data => {
+                io.on('connect', (socket) => {
+                    socket.emit('test' , { message : 'test' })
+                })
+                res.status(200).json({ data })
+            })
+            .catch(next)
+    }
+
+    static find(req,res,next){
+        Service.find().populate('tukangBasoId')
+        .then(data => {
+            res.status(200).json({ service : data})
+        })
+        .catch(next)
     }
 }
 

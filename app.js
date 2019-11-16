@@ -9,6 +9,7 @@ const router = require('./routes/index')
 const cors = require('cors')
 const errorHandler = require('./middleware/errorHandler')
 const mongoose = require('mongoose')
+const server = require('http').Server(app)
 
 if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
     mongoose.connect(`mongodb://localhost/initBosBakso_${process.env.NODE_ENV}`, 
@@ -39,8 +40,9 @@ app.use(express.urlencoded({extended:false}))
 app.use('/', router)
 app.use(errorHandler)
 
-app.listen(PORT , _ => console.log(`running on port PORT ${PORT}`))
+// app.listen(PORT , _ => console.log(`running on port PORT ${PORT}`))
+server.listen(PORT , _ => console.log(`running on port PORT ${PORT}`))
 
-module.exports = app
+module.exports = server
 
 
