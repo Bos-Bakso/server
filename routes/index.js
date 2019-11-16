@@ -5,6 +5,6 @@ const service = require('./services')
 
 router.use('/user', user)
 router.use('/transaction', transaction)
-router.use('/service', transaction)
+router.use('/service', service)
 
 module.exports = router

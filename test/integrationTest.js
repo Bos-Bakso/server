@@ -525,9 +525,43 @@ describe('TDD', function () {
                 .set(headers)
                 .send(bodyToService)
                 .end(function(err,res){
+                    const message = res.body.message
+                    const serviceCreated = res.body.serviceCreated
+                    expect(message).to.be.a('String')
+                    expect(serviceCreated).to.be.an('Object')
+                    expect(serviceCreated).to.have.property('problem')
+                    expect(serviceCreated).to.have.property('latitude')
+                    expect(serviceCreated).to.have.property('longitude')
+                    expect(serviceCreated).to.have.property('tukangBasoId')
+                    expect(serviceCreated).to.have.property('_id')
+                    expect(serviceCreated).to.have.property('createdAt')
+                    expect(serviceCreated).to.have.property('updatedAt')
                     done()
                 })
         })
+
+        it('add service auth fail', function(done){
+            let headers = {
+                token : 'randomtoken'
+            }
+            let bodyToService = {
+                problem : 'test',
+                longitude : -1.111,
+                latitude : -1.111
+            }
+            chai.request(app)
+                .post('/service')
+                .set(headers)
+                .send(bodyToService)
+                .end(function(err,res){
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('authentication error')
+                    done()
+                })
+        })
+
+        
     })
 })
 
