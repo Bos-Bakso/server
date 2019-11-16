@@ -1,16 +1,22 @@
 const Transaction = require('../model/transaction')
+const User = require('../model/transaction')
 const moment = require('moment')
 const today = moment().startOf('day')
 const ObjectId = require('mongoose').Types.ObjectId
 
 class Controller {
     static addBowl(req,res,next){
+        let output;
         const latitude = req.body.latitude
         const longitude = req.body.longitude
         console.log('add bowl triggered', req.loggedUser._id )
         Transaction.create({ tukangBaksoId : req.loggedUser._id, latitude, longitude })
         .then( data => {
-            res.status(201).json({ message : 'data added to database', data})
+            output = data
+            return User.findOneAndUpdate({ _id : req.loggedUser._id }, { $push : { history : data._id}})
+        })
+        .then( _ => {
+            res.status(201).json({ message : 'data added to database', data : output})
         })
         .catch(next)
     }
