@@ -105,6 +105,37 @@ describe('TDD', function () {
                     expect(user).to.have.property('history')
                     expect(user).to.have.property('_id')
                     expect(user.isOwner).to.be.equals(false)
+                    done()
+
+                })
+        })
+
+        it('add tukang baso success', function (done) {
+            let bodyAddTukangBasoDelete = {
+                username: 'tukangBasoDelete',
+                password: 'tukangBasoDelete'
+            }
+            let headers = {
+                token: tokenAdmin
+            }
+            chai.request(app)
+                .post('/user/add')
+                .send(bodyAddTukangBasoDelete)
+                .set(headers)
+                .end(function (err, res) {
+                    const message = res.body.message
+                    const user = res.body.user
+                    expect(message).to.be.a('String')
+                    expect(user).to.be.an('Object')
+                    expect(user).to.have.property('username')
+                    expect(user).to.have.property('password')
+                    expect(user).to.have.property('isOwner')
+                    expect(user).to.have.property('image')
+                    expect(user).to.have.property('latitude')
+                    expect(user).to.have.property('longitude')
+                    expect(user).to.have.property('history')
+                    expect(user).to.have.property('_id')
+                    expect(user.isOwner).to.be.equals(false)
                     tukangBasoIdToDelete = user._id
                     done()
 
