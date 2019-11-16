@@ -35,11 +35,10 @@ if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
     })
 }
 
-io.on('connect', (socket) => {
-    socket.emit('test' , { message : 'test', serviceCreated })
-})
-
 app.use(cors())
+io.on('connect', (socket) => {
+    socket.emit('test' , { message : 'test' })
+})
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
