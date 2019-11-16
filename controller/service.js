@@ -1,6 +1,4 @@
 const Service = require('../model/service')
-const server = require('../app')
-const io = require('socket.io')(server)
 
 class Controller {
     static addService(req, res, next) {
@@ -15,9 +13,6 @@ class Controller {
             tukangBasoId: req.loggedUser._id
         })
             .then(serviceCreated => {
-                io.on('connect', (socket) => {
-                    socket.emit('test' , { message : 'test', serviceCreated })
-                })
                 res.status(201).json({ serviceCreated, message: 'Service added to database' })
             })
             .catch(next)

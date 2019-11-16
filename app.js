@@ -10,6 +10,8 @@ const cors = require('cors')
 const errorHandler = require('./middleware/errorHandler')
 const mongoose = require('mongoose')
 const server = require('http').Server(app)
+const io = require('socket.io')(server)
+
 
 if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
     mongoose.connect(`mongodb://localhost/initBosBakso_${process.env.NODE_ENV}`, 
@@ -32,6 +34,10 @@ if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
             console.log('connected to mongodb ATLAS')
     })
 }
+
+io.on('connect', (socket) => {
+    socket.emit('test' , { message : 'test', serviceCreated })
+})
 
 app.use(cors())
 app.use(express.json())
