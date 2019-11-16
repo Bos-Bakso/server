@@ -89,6 +89,7 @@ class Controller {
         const longitude = req.body.longitude
         const username = req.loggedUser.username
         const _id = req.loggedUser._id
+        console.log('update Location Triggered', _id , latitude, longitude)
         User.findOneAndUpdate({ username, _id  }, { latitude, longitude })
         .then(updatedData => {
             res.status(200).json({ updatedData })

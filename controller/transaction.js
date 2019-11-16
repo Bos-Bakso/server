@@ -7,6 +7,7 @@ class Controller {
     static addBowl(req,res,next){
         const latitude = req.body.latitude
         const longitude = req.body.longitude
+        console.log('add bowl triggered', req.loggedUser._id )
         Transaction.create({ tukangBaksoId : req.loggedUser._id, latitude, longitude })
         .then( data => {
             res.status(201).json({ message : 'data added to database', data})

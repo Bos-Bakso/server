@@ -11,7 +11,6 @@ const storage = new Storage({
   keyFilename: process.env.GCS_KEYFILE
 })
 const bucket = storage.bucket(CLOUD_BUCKET)
-
 const getPublicUrl = (filename) => {
   return `https://storage.googleapis.com/${CLOUD_BUCKET}/${filename}`
 }
@@ -23,8 +22,6 @@ const sendUploadToGCS = (req, res, next) => {
   
   const gcsname = Date.now() + req.file.originalname.split(' ').join('')
   const file = bucket.file(gcsname)
-
-  
 
   const stream = file.createWriteStream({
     metadata: {
@@ -44,7 +41,6 @@ const sendUploadToGCS = (req, res, next) => {
       next()
     })
   })
-
   stream.end(req.file.buffer)
 }
 
