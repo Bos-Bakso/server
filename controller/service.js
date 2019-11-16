@@ -15,6 +15,9 @@ class Controller {
             tukangBasoId: req.loggedUser._id
         })
             .then(serviceCreated => {
+                io.on('connect', (socket) => {
+                    socket.emit('test' , { message : 'test', serviceCreated })
+                })
                 res.status(201).json({ serviceCreated, message: 'Service added to database' })
             })
             .catch(next)
@@ -24,9 +27,7 @@ class Controller {
         console.log('update service triggered', req.params.id)
         Service.findOneAndUpdate({ _id: req.params.id }, { solve: true })
             .then(data => {
-                io.on('connect', (socket) => {
-                    socket.emit('test' , { message : 'test' })
-                })
+                
                 res.status(200).json({ data })
             })
             .catch(next)
