@@ -508,7 +508,26 @@ describe('TDD', function () {
                 })
         })
 
+    })
 
+    describe('service test', function() {
+        it('add service', function(done){
+            let headers = {
+                token : tokenTukangBaso
+            }
+            let bodyToService = {
+                problem : 'test',
+                longitude : -1.111,
+                latitude : -1.111
+            }
+            chai.request(app)
+                .post('/service')
+                .set(headers)
+                .send(bodyToService)
+                .end(function(err,res){
+                    done()
+                })
+        })
     })
 })
 

@@ -5,6 +5,7 @@ class Controller {
         const problem = req.body.problem
         const latitude = req.body.latitude
         const longitude = req.body.longitude
+        console.log('add service triggered', problem, latitude, longitude)
         Service.create({ 
             problem,
             latitude,
@@ -18,6 +19,7 @@ class Controller {
     }
 
     static updateService(req,res,next){
+        console.log('update service triggered', req.params.id)
        Service.findOneAndUpdate({ _id : req.params.id }, { solve : true }) 
        .then( data => {
            res.status(200).json({data})
