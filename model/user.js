@@ -15,9 +15,9 @@ const User = new Schema({
     history : [
         { type : Schema.Types.ObjectId, ref : 'transaction' }
     ],
-    isOwner : {
-        type : Boolean,
-        default : false
+    role : {
+        type : String,
+        default : "baso"
     },
     latitude : {
         type : Number,
