@@ -501,20 +501,20 @@ describe('TDD', function () {
                 })
         })
 
-        it('fetch data fail auth 2', function (done) {
-            let headers = {
-                token: tokenTukangBaso
-            }
-            chai.request(app)
-                .get('/transaction/')
-                .set(headers)
-                .end(function (err, res) {
-                    const message = res.body.message
-                    expect(message).to.be.a('String')
-                    expect(message).to.be.equals('authorization error')
-                    done()
-                })
-        })
+        // it('fetch data fail auth 2', function (done) {
+        //     let headers = {
+        //         token: tokenTukangBaso
+        //     }
+        //     chai.request(app)
+        //         .get('/transaction/')
+        //         .set(headers)
+        //         .end(function (err, res) {
+        //             const message = res.body.message
+        //             expect(message).to.be.a('String')
+        //             expect(message).to.be.equals('authorization error')
+        //             done()
+        //         })
+        // })
 
         it('fetch transaction', function (done) {
             let headers = {

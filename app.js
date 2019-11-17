@@ -11,6 +11,7 @@ const errorHandler = require('./middleware/errorHandler')
 const mongoose = require('mongoose')
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+const rank = require('./helper/rank')
 
 
 if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
@@ -36,8 +37,16 @@ if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
 }
 
 app.use(cors())
-io.on('connect', (socket) => {
-    socket.emit('test' , { message : 'test' })
+io.on('connect', async(socket) => {
+    // socket.emit('test' , { message : 'test' })
+
+    console.log("socket connected...");
+    let data = await rank() 
+    socket.on('add', function(){
+        io.emit('test' ,  data )   
+    })
+    io.emit('test' ,  data )
+
 })
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
