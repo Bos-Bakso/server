@@ -38,9 +38,6 @@ if(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'){
 
 app.use(cors())
 io.on('connect', async(socket) => {
-    // socket.emit('test' , { message : 'test' })
-
-    console.log("socket connected...");
     let data = await rank() 
     socket.on('add', function(){
         io.emit('test' ,  data )   

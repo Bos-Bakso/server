@@ -22,7 +22,6 @@ class Controller {
         console.log('update service triggered', req.params.id)
         Service.findOneAndUpdate({ _id: req.params.id }, { solve: true })
             .then(data => {
-                
                 res.status(200).json({ data })
             })
             .catch(next)

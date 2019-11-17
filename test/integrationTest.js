@@ -11,6 +11,7 @@ describe('TDD', function () {
     let tokenAdmin;
     let tokenTukangBaso;
     let tukangBasoIdToDelete;
+    let idServiceToSolve;
 
     before(async function () {
         await User.deleteMany({})
@@ -541,21 +542,21 @@ describe('TDD', function () {
 
     })
 
-    describe('service test', function() {
-        it('add service', function(done){
+    describe('service test', function () {
+        it('add service', function (done) {
             let headers = {
-                token : tokenTukangBaso
+                token: tokenTukangBaso
             }
             let bodyToService = {
-                problem : 'test',
-                longitude : -1.111,
-                latitude : -1.111
+                problem: 'test',
+                longitude: -1.111,
+                latitude: -1.111
             }
             chai.request(app)
                 .post('/service')
                 .set(headers)
                 .send(bodyToService)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     const serviceCreated = res.body.serviceCreated
                     expect(message).to.be.a('String')
@@ -567,24 +568,25 @@ describe('TDD', function () {
                     expect(serviceCreated).to.have.property('_id')
                     expect(serviceCreated).to.have.property('createdAt')
                     expect(serviceCreated).to.have.property('updatedAt')
+                    idServiceToSolve = serviceCreated._id
                     done()
                 })
         })
 
-        it('add service auth fail', function(done){
+        it('add service auth fail', function (done) {
             let headers = {
-                token : 'randomtoken'
+                token: 'randomtoken'
             }
             let bodyToService = {
-                problem : 'test',
-                longitude : -1.111,
-                latitude : -1.111
+                problem: 'test',
+                longitude: -1.111,
+                latitude: -1.111
             }
             chai.request(app)
                 .post('/service')
                 .set(headers)
                 .send(bodyToService)
-                .end(function(err,res){
+                .end(function (err, res) {
                     const message = res.body.message
                     expect(message).to.be.a('String')
                     expect(message).to.be.equals('authentication error')
@@ -592,7 +594,71 @@ describe('TDD', function () {
                 })
         })
 
-        
+        it('update service to solve', function (done) {
+            let headers = {
+                token: tokenAdmin
+            }
+            chai.request(app)
+                .patch(`/service/${idServiceToSolve}`)
+                .set(headers)
+                .end(function (err, res) {
+                    const data = res.body.data
+                    expect(data).to.be.an('Object')
+                    expect(data).to.have.property('latitude')
+                    expect(data).to.have.property('longitude')
+                    expect(data).to.have.property('_id')
+                    expect(data).to.have.property('solve')
+                    expect(data).to.have.property('problem')
+                    expect(data).to.have.property('tukangBasoId')
+                    expect(data).to.have.property('createdAt')
+                    expect(data).to.have.property('updatedAt')
+                    expect(data._id).to.be.equals(idServiceToSolve)
+                    done()
+                })
+        })
+
+        it('update service to solve auth fail', function (done) {
+            let headers = {
+                token: 'randomtoken'
+            }
+            chai.request(app)
+                .patch(`/service/${idServiceToSolve}`)
+                .set(headers)
+                .end(function (err, res) {
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('authentication error')
+                    done()
+                })
+        })
+
+
+        it('service find', function (done) {
+            let headers = {
+                token: tokenTukangBaso
+            }
+            chai.request(app)
+                .get('/service/')
+                .set(headers)
+                .end(function (err, res) {
+                    const services = res.body.service
+                    expect(services).to.be.an('Array')
+                    services.forEach(data => {
+                        expect(data).to.be.an('Object')
+                        expect(data).to.have.property('latitude')
+                        expect(data).to.have.property('longitude')
+                        expect(data).to.have.property('_id')
+                        expect(data).to.have.property('solve')
+                        expect(data).to.have.property('problem')
+                        expect(data).to.have.property('tukangBasoId')
+                        expect(data).to.have.property('createdAt')
+                        expect(data).to.have.property('updatedAt')
+                    })
+                    done()
+                })
+        })
+
+
     })
 })
 

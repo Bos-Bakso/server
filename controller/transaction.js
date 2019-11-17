@@ -9,15 +9,13 @@ class Controller {
         let output;
         const latitude = req.body.latitude
         const longitude = req.body.longitude
-        console.log('add bowl triggered', req.loggedUser)
+        console.log('add bowl triggered', req.loggedUser._id)
         Transaction.create({ tukangBaksoId : req.loggedUser._id, latitude, longitude })
         .then( data => {
             output = data
             return User.findOne({ _id : req.loggedUser._id })
-            return User.updateOne({ _id : new ObjectId(req.loggedUser._id) } , { $push : { history : data._id }})
         })
         .then( dataUpdate => {
-            console.log(dataUpdate, "========== push to transaction")
             res.status(201).json({ message : 'data added to database', data : output, dataUpdate})
         })
         .catch(next)
