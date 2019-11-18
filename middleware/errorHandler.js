@@ -30,7 +30,9 @@ module.exports = (err, req, res, next) => {
             res.status(403).json({ message })
             break
         default:
+            /* istanbul ignore next */
             res.status(500).json(err)
+            /* istanbul ignore next */
             break;
     }
 }

@@ -7,8 +7,10 @@ class Controller {
         const username = req.body.username
         const password = req.body.password
         const isOwner = true
+        const role = 'admin'
         let image;
         if(req.file){
+            /* istanbul ignore next */
             image = req.file.cloudStoragePublicUrl
         } else {
             image = 'https://porteous.com.au/wp-content/uploads/2016/09/dummy-profile-pic-male-300x300.jpg'
@@ -18,7 +20,7 @@ class Controller {
             if(existingUser){
                 throw next({ name : 'duplicationError'})
             }else {
-                return User.create({ username, password, image, isOwner })
+                return User.create({ username, password, image, isOwner , role })
             }
         })
         .then( user => {
@@ -30,8 +32,10 @@ class Controller {
     static addTukangBaso(req,res,next){
         const username = req.body.username
         const password = req.body.password
+        const role = "baso"
         let image;
         if(req.file){
+            /* istanbul ignore next */
             image = req.file.cloudStoragePublicUrl
         }else{
             image = 'https://porteous.com.au/wp-content/uploads/2016/09/dummy-profile-pic-male-300x300.jpg'
@@ -41,7 +45,7 @@ class Controller {
             if(existingUser){
                 throw next({ name : 'duplicationError'})
             }else {
-                return User.create({username, password, image })
+                return User.create({username, password, image, role })
             }
         })
         .then( user => {
@@ -70,12 +74,12 @@ class Controller {
                 throw next({ name : 'LoginError'})
             }else {
                 if(compare(password, user.password)){
-                    const { _id, username, isOwner, latitude, longitude, history, image } = user
+                    const { _id, username, isOwner, latitude, longitude, history, image, role } = user
                     const payload = { 
-                        _id, username, isOwner, latitude, longitude, history, image
+                        _id, username, isOwner, latitude, longitude, history, image, role
                     }
                     const token = generateToken(payload)
-                    res.status(200).json({token, isOwner, username, latitude, longitude, history, image})
+                    res.status(200).json({token, isOwner, username, latitude, longitude, history, image, role})
                 }else{
                     throw next({ name : 'LoginError'})
                 }

@@ -45,6 +45,10 @@ io.on('connect', async(socket) => {
     io.emit('test' ,  data )
 
 })
+app.use((req, res, next) => {
+    req.io = io
+    next()
+})
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 

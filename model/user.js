@@ -21,7 +21,7 @@ const User = new Schema({
     },
     role : {
         type : String,
-        default : 'Baso'
+        default : 'baso'
     },
     latitude : {
         type : Number,
