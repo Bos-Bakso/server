@@ -2,7 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const { hash } =require('../helper/bcrypt')
 
-const User = new Schema({    
+const User = new Schema({
+    facebook : {
+        type : String,
+    },    
     username: {
         type: String,
         required: [true, 'username is required'],

@@ -13,7 +13,7 @@ class Controller {
             tukangBasoId: req.loggedUser._id
         })
             .then(serviceCreated => {
-                req.io.emit('newService' , { data : serviceCreated , message : "ada yg baru nih" } )
+                // req.io.emit('newService' , { data : serviceCreated , message : "ada yg baru nih" } )
                 res.status(201).json({ serviceCreated, message: 'Service added to database' })
             })
             .catch(next)

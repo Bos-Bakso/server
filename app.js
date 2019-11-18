@@ -17,18 +17,18 @@ const rank = require('./helper/rank')
 mongo()
 
 app.use(cors())
-io.on('connect', async(socket) => {
-    let data = await rank() 
-    socket.on('add', function(){
-        io.emit('test' ,  data )   
-    })
-    io.emit('test' ,  data )
-})
+// io.on('connect', async(socket) => {
+//     let data = await rank() 
+//     socket.on('add', function(){
+//         io.emit('test' ,  data )   
+//     })
+//     io.emit('test' ,  data )
+// })
 
-app.use((req, res, next) => {
-    req.io = io
-    next()
-})
+// app.use((req, res, next) => {
+//     req.io = io
+//     next()
+// })
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
