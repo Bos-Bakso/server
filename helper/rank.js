@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const Transaction = require('../model/transaction')
 const User = require('../model/user')
 const rank =() => new Promise(function(res, rej) {

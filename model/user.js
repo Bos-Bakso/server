@@ -25,11 +25,11 @@ const User = new Schema({
     },
     latitude : {
         type : Number,
-        default : 0
+        default : -6.260762
     },
     longitude : {
         type : Number,
-        default : 0
+        default : 106.781461
     },
     image : {
         type : String,
