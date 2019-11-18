@@ -24,6 +24,10 @@ io.on('connect', async(socket) => {
         io.emit('test' ,  data )   
     })
     io.emit('test' ,  data )
+
+    socket.on('disconnect', function(){
+        socket.disconnect()
+    })
 })
 
 app.use((req, res, next) => {
