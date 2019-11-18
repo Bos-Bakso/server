@@ -17,6 +17,7 @@ mongo()
 
 app.use(cors())
 io.on('connect', async(socket) => {
+    console.log('connect socket yeay ')
     let data = await rank() 
     socket.on('add', function(){
         io.emit('test' ,  data )   
