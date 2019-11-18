@@ -18,7 +18,7 @@ const rank =() => new Promise(function(res, rej) {
                         if (el.tukangBaksoId.toString()== person._id.toString()){
                             person.totalBakso = person.totalBakso + 1
                         }}
-                        )
+                    )
                     arr.push(person)
                 })
                 res({
@@ -28,7 +28,7 @@ const rank =() => new Promise(function(res, rej) {
             .catch(err => {
                 console.log(err);
             })
-    })
+    })  
     .catch(err => {
         console.log(err);
     })

@@ -660,5 +660,26 @@ describe('TDD', function () {
 
 
     })
+
+    describe('fetch rank', function(){
+
+        it('fetch rank', function(done){
+            chai.request(app)
+                .get('/rank')
+                .end(function(err,res){
+                    const rank = res.body.rank.rank
+                    console.log(rank)
+                    expect(rank).to.be.an('Array')
+                    rank.forEach(item => {
+                        expect(item).to.be.an('Object')
+                        expect(item).to.have.property('_id')
+                        expect(item).to.have.property('username')
+                        expect(item).to.have.property('image')
+                        expect(item).to.have.property('totalBakso')
+                    })
+                    done()
+                })
+        })
+    })
 })
 
