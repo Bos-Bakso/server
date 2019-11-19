@@ -2,7 +2,7 @@
 const Transaction = require('../model/transaction')
 const User = require('../model/user')
 const rank =() => new Promise(function(res, rej) {
-    User.find({ isOwner: false })
+    User.find({ role : 'baso' })
     .then(abangs => {
         Transaction.find()
             .then(transactions => {
