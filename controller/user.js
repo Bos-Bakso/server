@@ -79,9 +79,9 @@ class Controller {
                 throw next({ name : 'LoginError'})
             }else {
                 if(compare(password, user.password)){
-                    const { _id, username, isOwner, latitude, longitude, history, image, role } = user
+                    const { _id, username, isOwner, latitude, longitude, history, image, role, facebook } = user
                     const payload = { 
-                        _id, username, isOwner, latitude, longitude, history, image, role
+                        _id, username, isOwner, latitude, longitude, history, image, role, facebook
                     }
                     const token = generateToken(payload)
                     res.status(200).json({token, isOwner, username, latitude, longitude, history, image, role, _id})
