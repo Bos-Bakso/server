@@ -6,9 +6,11 @@ class Controller {
     static registerAdmin(req,res,next){
         const username = req.body.username
         const password = req.body.password
+        const facebook = req.body.facebook
         const isOwner = true
         const role = 'admin'
         let image;
+        /* istanbul ignore next */
         if(req.file){
             /* istanbul ignore next */
             image = req.file.cloudStoragePublicUrl
@@ -20,7 +22,7 @@ class Controller {
             if(existingUser){
                 throw next({ name : 'duplicationError'})
             }else {
-                return User.create({ username, password, image, isOwner , role })
+                return User.create({ username, password, image, isOwner , role, facebook })
             }
         })
         .then( user => {
@@ -32,8 +34,10 @@ class Controller {
     static addTukangBaso(req,res,next){
         const username = req.body.username
         const password = req.body.password
-        const role = "baso"
+        const role = req.body.role
+        const facebook = req.body.facebook
         let image;
+        /* istanbul ignore next */
         if(req.file){
             /* istanbul ignore next */
             image = req.file.cloudStoragePublicUrl
@@ -45,7 +49,7 @@ class Controller {
             if(existingUser){
                 throw next({ name : 'duplicationError'})
             }else {
-                return User.create({username, password, image, role })
+                return User.create({username, password, image, role, facebook })
             }
         })
         .then( user => {
@@ -58,6 +62,7 @@ class Controller {
         const { id } = req.params
         User.findByIdAndDelete({ _id : id })
         .then( deletedUser => {
+            /* istanbul ignore next */
             if(deletedUser){
                 res.status(200).json({deletedUser})
             }

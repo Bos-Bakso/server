@@ -1,9 +1,9 @@
 const router = require('express').Router()
 const Controller = require('../controller/service')
-const { authentication, authorization } = require('../middleware/auth')
+const { authentication, authorizationService } = require('../middleware/auth')
 
 router.post('/', authentication ,Controller.addService)
-router.patch('/:id', authentication, Controller.updateService)
+router.patch('/:id', authentication, authorizationService, Controller.updateService)
 router.get('/', authentication, Controller.find)
 
 

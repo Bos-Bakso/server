@@ -1,6 +1,5 @@
 module.exports = (err, req, res, next) => {
     let name = err.name
-    console.log('errorHandler => ', err)
     switch (name) {
         case "ValidationError":
             var message = []
@@ -29,6 +28,7 @@ module.exports = (err, req, res, next) => {
             var message = 'authorization error'
             res.status(403).json({ message })
             break
+            /* istanbul ignore next */
         default:
             /* istanbul ignore next */
             res.status(500).json(err)

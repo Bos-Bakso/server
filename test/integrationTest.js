@@ -12,6 +12,7 @@ describe('TDD', function () {
     let tokenTukangBaso;
     let tukangBasoIdToDelete;
     let idServiceToSolve;
+    let tokenTukangService;
 
     before(async function () {
         await User.deleteMany({})
@@ -24,6 +25,7 @@ describe('TDD', function () {
             let body = {
                 username: 'adminTest01',
                 password: 'adminTest01',
+                facebook: 'urlfacebok'
             }
             chai.request(app)
                 .post('/user/registerAdmin')
@@ -49,6 +51,7 @@ describe('TDD', function () {
             let bodyRegisterFail = {
                 username: 'adminTest01',
                 password: 'adminTest01',
+                facebook: 'urlfacebok'
             }
             chai.request(app)
                 .post('/user/registerAdmin')
@@ -83,7 +86,9 @@ describe('TDD', function () {
         it('add tukang baso success', function (done) {
             let bodyAddTukangBaso = {
                 username: 'tukangBaso1',
-                password: 'tukangBaso1'
+                password: 'tukangBaso1',
+                facebook: 'urlfacebok',
+                role : 'baso'
             }
             let headers = {
                 token: tokenAdmin
@@ -105,16 +110,19 @@ describe('TDD', function () {
                     expect(user).to.have.property('longitude')
                     expect(user).to.have.property('history')
                     expect(user).to.have.property('_id')
+                    expect(user).to.have.property('role')
+                    expect(user.role).to.be.equals('baso')
                     expect(user.isOwner).to.be.equals(false)
                     done()
-
                 })
         })
 
         it('add tukang baso success', function (done) {
             let bodyAddTukangBasoDelete = {
                 username: 'tukangBasoDelete',
-                password: 'tukangBasoDelete'
+                password: 'tukangBasoDelete',
+                role : 'baso',
+                facebook: 'urlfacebok'
             }
             let headers = {
                 token: tokenAdmin
@@ -136,6 +144,8 @@ describe('TDD', function () {
                     expect(user).to.have.property('longitude')
                     expect(user).to.have.property('history')
                     expect(user).to.have.property('_id')
+                    expect(user).to.have.property('role')
+                    expect(user.role).to.be.equals('baso')
                     expect(user.isOwner).to.be.equals(false)
                     tukangBasoIdToDelete = user._id
                     done()
@@ -143,10 +153,65 @@ describe('TDD', function () {
                 })
         })
 
+        it('add tukang service success', function (done) {
+            let bodyAddTukangBasoDelete = {
+                username: 'tukangService',
+                password: 'tukangService',
+                facebook: 'urlfacebok',
+                role : 'service'
+            }
+            let headers = {
+                token: tokenAdmin
+            }
+            chai.request(app)
+                .post('/user/add')
+                .send(bodyAddTukangBasoDelete)
+                .set(headers)
+                .end(function (err, res) {
+                    const message = res.body.message
+                    const user = res.body.user
+                    expect(message).to.be.a('String')
+                    expect(user).to.be.an('Object')
+                    expect(user).to.have.property('username')
+                    expect(user).to.have.property('password')
+                    expect(user).to.have.property('isOwner')
+                    expect(user).to.have.property('image')
+                    expect(user).to.have.property('latitude')
+                    expect(user).to.have.property('longitude')
+                    expect(user).to.have.property('history')
+                    expect(user).to.have.property('_id')
+                    expect(user).to.have.property('role')
+                    expect(user.role).to.be.equals('service')
+                    expect(user.isOwner).to.be.equals(false)
+                    tukangBasoIdToDelete = user._id
+                    done()
+                })
+        })
+
+        it('login tukang service success', function (done) {
+            let bodyTukangBasoLogin = {
+                username: 'tukangService',
+                password: 'tukangService',
+            }
+            chai.request(app)
+                .post('/user/login')
+                .send(bodyTukangBasoLogin)
+                .end(function (err, res) {
+                    const token = res.body.token
+                    const role = res.body.role
+                    expect(token).to.be.a('String')
+                    expect(role).to.be.a('String')
+                    expect(role).to.be.equal('service')
+                    tokenTukangService = token
+                    done()
+                })
+        })
+
+
         it('login tukang baso success', function (done) {
             let bodyTukangBasoLogin = {
                 username: 'tukangBaso1',
-                password: 'tukangBaso1'
+                password: 'tukangBaso1',
             }
             chai.request(app)
                 .post('/user/login')
@@ -197,7 +262,8 @@ describe('TDD', function () {
         it('add tukang baso fail authfail', function (done) {
             let bodyAddTukangBasoFail = {
                 username: 'tukangBaso1',
-                password: 'tukangBaso1'
+                password: 'tukangBaso1',
+                facebook: 'urlfacebok'
             }
             let headers = {
                 token: 'FAILTOKEN'
@@ -217,7 +283,8 @@ describe('TDD', function () {
         it('add tukang baso fail authfail2', function (done) {
             let bodyAddTukangBasoFail2 = {
                 username: 'tukangBaso1',
-                password: 'tukangBaso1'
+                password: 'tukangBaso1',
+                facebook: 'urlfacebok'
             }
             let headers = {
                 token: tokenTukangBaso
@@ -237,7 +304,8 @@ describe('TDD', function () {
         it('add tukang baso duplication user name', function (done) {
             let bodyAddTukangBaso = {
                 username: 'tukangBaso1',
-                password: 'tukangBaso1'
+                password: 'tukangBaso1',
+                facebook: 'urlfacebok'
             }
             let headers = {
                 token: tokenAdmin
@@ -257,7 +325,8 @@ describe('TDD', function () {
         it('add tukang baso validation error', function (done) {
             let bodyAddTukangBaso = {
                 username: '',
-                password: 'tukangbaso1'
+                password: 'tukangbaso1',
+                facebook: 'urlfacebok'
             }
             let headers = {
                 token: tokenAdmin
@@ -596,7 +665,7 @@ describe('TDD', function () {
 
         it('update service to solve', function (done) {
             let headers = {
-                token: tokenAdmin
+                token: tokenTukangService
             }
             chai.request(app)
                 .patch(`/service/${idServiceToSolve}`)
@@ -616,6 +685,22 @@ describe('TDD', function () {
                     done()
                 })
         })
+
+        it('update service to solve auth fail', function (done) {
+            let headers = {
+                token: tokenTukangBaso
+            }
+            chai.request(app)
+                .patch(`/service/${idServiceToSolve}`)
+                .set(headers)
+                .end(function (err, res) {
+                    const message = res.body.message
+                    expect(message).to.be.a('String')
+                    expect(message).to.be.equals('authorization error')
+                    done()
+                })
+        })
+
 
         it('update service to solve auth fail', function (done) {
             let headers = {
@@ -668,7 +753,6 @@ describe('TDD', function () {
                 .get('/rank')
                 .end(function(err,res){
                     const rank = res.body.rank.rank
-                    console.log(rank)
                     expect(rank).to.be.an('Array')
                     rank.forEach(item => {
                         expect(item).to.be.an('Object')

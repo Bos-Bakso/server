@@ -12,11 +12,18 @@ const authentication = (req,res,next) => {
 
 const authorization = (req,res,next) => {
     const user = req.loggedUser
-    if(user.isOwner)next()
+    if(user.role === 'admin')next()
+    else next({name : 'AuthorizationError'})
+}
+
+const authorizationService = (req,res,next) => {
+    const user = req.loggedUser
+    if(user.role === 'service')next()
     else next({name : 'AuthorizationError'})
 }
 
 module.exports = {
     authentication,
-    authorization
+    authorization,
+    authorizationService
 }
