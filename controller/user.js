@@ -31,7 +31,7 @@ class Controller {
         .catch(next)
     }
     
-    static addTukangBaso(req,res,next){
+    static addAbang(req,res,next){
         const username = req.body.username
         const password = req.body.password
         const role = req.body.role

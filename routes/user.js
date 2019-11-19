@@ -7,7 +7,7 @@ router.get('/',Controller.find)
 router.patch('/', authentication, Controller.updateLocation)
 router.post('/login', Controller.login)
 router.post('/registerAdmin', multer.single('image'), sendUploadToGCS ,Controller.registerAdmin )
-router.post('/add' , authentication, authorization, multer.single('image'), sendUploadToGCS ,Controller.addTukangBaso)
+router.post('/add' , authentication, authorization, multer.single('image'), sendUploadToGCS ,Controller.addAbang)
 router.delete('/:id', authentication, authorization ,Controller.pecatTukangBaso )
 
 module.exports = router
