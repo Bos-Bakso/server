@@ -37,7 +37,7 @@ const User = new Schema({
     image : {
         type : String,
     }
-})
+}, {timestamps : true})
 
 User.pre('save' , function(next){
     this.password = hash(this.password)

@@ -9,8 +9,9 @@ class Controller {
         let output;
         const latitude = req.body.latitude
         const longitude = req.body.longitude
+        const date = req.body.date || new Date()
         console.log('add bowl triggered', req.loggedUser._id)
-        Transaction.create({ tukangBaksoId : req.loggedUser._id, latitude, longitude })
+        Transaction.create({ tukangBaksoId : req.loggedUser._id, latitude, longitude, date })
         .then( data => {
             output = data
             return User.findOne({ _id : req.loggedUser._id })

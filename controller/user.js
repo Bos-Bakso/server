@@ -107,8 +107,9 @@ class Controller {
     }
     
     static find(req,res,next){
-        User.find({isOwner : false})
+        User.find({isOwner : false}).sort({ createdAt : 'desc'})
         .then( user => {
+            console.log('user', user)
             res.status(200).json(user)
         })
         .catch(next)

@@ -29,7 +29,7 @@ class Controller {
     }
 
     static find(req,res,next){
-        Service.find().populate('tukangBasoId').sort({'createdAt' : -1})
+        Service.find().populate('tukangBasoId').sort({createdAt : 'desc'})
         .then(data => {
             res.status(200).json({ service : data})
         })

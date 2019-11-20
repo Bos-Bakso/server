@@ -15,6 +15,9 @@ const Transaction = new Schema({
     },
     longitude : {
         type : Number
+    },
+    date : {
+        type : Date
     }
 }, { timestamps : true })
 
